@@ -182,6 +182,69 @@ describe TimeDifference do
         end
       end
 
+      context 'start_date and end_date are on different days of different months of the same year' do
+        context 'start_time is before end_time' do
+          context 'not a leap year' do
+            it 'returns 2.5' do
+              start_time = clazz.new(2019, 1, 1)
+              end_time = clazz.new(2019, 3, 16)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(2.5)
+            end
+
+            it 'returns 2.5' do
+              start_time = clazz.new(2019, 4, 10)
+              end_time = clazz.new(2019, 6, 26)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(2.5)
+            end
+
+            it 'returns 5.5' do
+              start_time = clazz.new(2019, 4, 15)
+              end_time = clazz.new(2019, 9, 30)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(5.5)
+            end
+          end
+
+          context 'leap year' do
+            it 'returns 2.5' do
+              start_time = clazz.new(2020, 1, 1)
+              end_time = clazz.new(2020, 3, 16)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(2.5)
+            end
+
+            it 'returns 5.5' do
+              start_time = clazz.new(2020, 4, 15)
+              end_time = clazz.new(2020, 9, 30)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(5.5)
+            end
+          end
+        end
+
+        context 'end_time is before start_time' do
+          context 'not a leap year' do
+            it 'returns 2.5' do
+              start_time = clazz.new(2019, 3, 16)
+              end_time = clazz.new(2019, 1, 1)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(2.5)
+            end
+          end
+
+          context 'leap year' do
+            it 'returns 5.5' do
+              start_time = clazz.new(2020, 9, 30)
+              end_time = clazz.new(2020, 4, 15)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(5.5)
+            end
+          end
+        end
+      end
+
       context 'start_time and end_time are in different years' do
         context 'start_time is before end_time' do
           context 'does not include a leap year' do
@@ -197,6 +260,13 @@ describe TimeDifference do
               end_time = clazz.new(2019, 9, 15)
 
               expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(18.0)
+            end
+
+            it 'returns 18.5' do
+              start_time = clazz.new(2018, 3, 15)
+              end_time = clazz.new(2019, 9, 30)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(18.5)
             end
 
             it 'returns 24.0' do
@@ -227,6 +297,13 @@ describe TimeDifference do
               end_time = clazz.new(2020, 9, 15)
 
               expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(18.0)
+            end
+
+            it 'returns 18.5' do
+              start_time = clazz.new(2019, 3, 15)
+              end_time = clazz.new(2020, 9, 30)
+
+              expect(TimeDifference.between(start_time, end_time).in_months.round(1)).to eql(18.5)
             end
 
             it 'returns 24.0' do
