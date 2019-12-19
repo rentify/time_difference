@@ -69,7 +69,6 @@ class TimeDifference
     end_time_in_seconds = time_in_seconds(end_time)
 
     @time_diff = (end_time_in_seconds - start_time_in_seconds).abs
-    # @time_diff += 86400 if include_leap_year_day?(start_time, end_time)
   end
 
   def time_in_seconds(time)
@@ -142,11 +141,4 @@ class TimeDifference
   def leap_year_months
     [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   end
-
-  # def include_leap_year_day?(start_date, end_date)
-  #   start_date = start_date.to_date
-  #   end_date = end_date.to_date
-  #   (start_date..end_date).select{ |date| date.month == 2 && date.day > 28 }.any? && in_days >= 1.0
-  # end
-
 end
