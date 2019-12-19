@@ -28,7 +28,7 @@ class TimeDifference
       last_year_days = ((@end_time - @end_time.at_beginning_of_year) / 86400 + 1)
       last_year_months(last_year_days)
 
-      @months += (@end_time.year - @start_time.year) * 12 if @end_time.year - @start_time.year >= 2
+      @months += ((@end_time.year - @start_time.year) - 1) * 12 if @end_time.year - @start_time.year >= 2
     elsif (@end_time.year - @start_time.year).zero? && @end_time.month != @start_time.month
       if @start_time.to_date.leap?
         if @start_time.day == @end_time.day
@@ -53,9 +53,9 @@ class TimeDifference
       end
     elsif (@end_time.year - @start_time.year).zero? && @end_time.month == @start_time.month
       if @start_time.to_date.leap?
-        @months += (@end_time.day - @start_time.day) / leap_year_months[@start_time.month - 1]
+        @months += (@end_time.day - @start_time.day).to_f / leap_year_months[@start_time.month - 1.to_f]
       else
-        @months += (@end_time.day - @start_time.day) / normal_year_months[@start_time.month - 1]
+        @months += (@end_time.day - @start_time.day).to_f / normal_year_months[@start_time.month - 1.to_f]
       end
     else
       puts "❌❌❌❌❌❌❌❌❌❌❌❌❌"
@@ -94,22 +94,14 @@ class TimeDifference
       leap_year_months.each do |month_days|
         break if days <= 0
 
-        if days < month_days
-          @months += (days / month_days)
-        else
-          @months += 1
-        end
+        days < month_days ? @months += (days / month_days) : @months += 1
         days -= month_days
       end
     else
       normal_year_months.each do |month_days|
         break if days <= 0
 
-        if days < month_days
-          @months += (days / month_days)
-        else
-          @months += 1
-        end
+        days < month_days ? @months += (days / month_days) : @months += 1
         days -= month_days
       end
     end
