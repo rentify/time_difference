@@ -18,7 +18,7 @@ class TimeDifference
   def in_months
     @months = 0.0
     @start_time, @end_time = @end_time, @start_time if @end_time < @start_time
-    @end_time.year - @start_time.year >= 1 ? set_multiple_year_months : (@end_time.month != @start_time.month ? set_same_year_months : set_same_month_months)
+    @end_time.year - @start_time.year >= 1 ? set_multiple_year_months : set_single_year_months
     @months.round(2)
   end
 
@@ -113,7 +113,11 @@ class TimeDifference
     ((@end_time - @end_time.at_beginning_of_year) / 86400 + 1)
   end
 
-  def set_same_year_months
+  def set_single_year_months
+    @end_time.month != @start_time.month ? set_different_month_months : set_same_month_months
+  end
+
+  def set_different_month_months
     set_months_array(@start_time)
     @start_time.day == @end_time.day ? @months += 1 : set_partial_months
     @months += (@end_time.month - @start_time.month) - 1
