@@ -17,59 +17,72 @@ class TimeDifference
 
   def in_months
     # (@time_diff / (1.day * 30.42)).round(2)
-    months = 0
+
+    @months = 0.0
     @start_time, @end_time = @end_time, @start_time if @end_time < @start_time
 
     if @end_time.year - @start_time.year >= 1
-      first_year_days = ((@start_time + 1.year).at_beginning_of_year - @start_time) / 86400
+      first_year_days = (((@start_time + 1.year).at_beginning_of_year - @start_time) / 86400) - 1
       first_year_months(first_year_days)
 
-      last_year_days = (@end_time - @end_time.at_beginning_of_year) / 86400
+      last_year_days = ((@end_time - @end_time.at_beginning_of_year) / 86400 + 1)
       last_year_months(last_year_days)
 
-      months += (@end_time.year - @start_time.year) * 12 if @end_time.year - @start_time.year >= 2
+      @months += (@end_time.year - @start_time.year) * 12 if @end_time.year - @start_time.year >= 2
     elsif (@end_time.year - @start_time.year).zero? && @end_time.month != @start_time.month
       if @start_time.to_date.leap?
-        first_month_days = leap_year_months[@start_time.month - 1] - @start_time.day
-        months += (first_month_days / leap_year_months[@start_time.month - 1])
+        if @start_time.day == @end_time.day
+          @months += 1
+        else
+          first_month_days = leap_year_months[@start_time.month - 1] - @start_time.day
+          @months += (first_month_days.to_f / leap_year_months[@start_time.month - 1].to_f)
+          @months += (@end_time.day.to_f / leap_year_months[@end_time.month - 1].to_f)
+        end
 
-        months += (@end_time.day / leap_year_months[@end_time.month - 1])
-
-        months += (@end_time.month - @start_time.month) - 1
+        @months += (@end_time.month - @start_time.month) - 1
       else
-        first_month_days = normal_year_months[@start_time.month - 1] - @start_time.day
-        months += (first_month_days / normal_year_months[@start_time.month - 1])
+        if @start_time.day == @end_time.day
+          @months += 1
+        else
+          first_month_days = normal_year_months[@start_time.month - 1] - @start_time.day
+          @months += (first_month_days.to_f / normal_year_months[@start_time.month - 1].to_f)
+          @months += (@end_time.day.to_f / normal_year_months[@end_time.month - 1].to_f)
+        end
 
-        months += (@end_time.day / normal_year_months[@end_time.month - 1])
-
-        months += (@end_time.month - @start_time.month) - 1
+        @months += (@end_time.month - @start_time.month) - 1
       end
     elsif (@end_time.year - @start_time.year).zero? && @end_time.month == @start_time.month
       if @start_time.to_date.leap?
-        months += (@end_time.day - @start_time.day) / leap_year_months[@start_time.month - 1]
+        @months += (@end_time.day - @start_time.day) / leap_year_months[@start_time.month - 1]
       else
-        months += (@end_time.day - @start_time.day) / normal_year_months[@start_time.month - 1]
+        @months += (@end_time.day - @start_time.day) / normal_year_months[@start_time.month - 1]
       end
+    else
+      puts "❌❌❌❌❌❌❌❌❌❌❌❌❌"
     end
-    months
+    @months
   end
 
   def first_year_months(days)
     if @start_time.to_date.leap?
       leap_year_months.reverse.each do |month_days|
+        break if days <= 0
+
         if days < month_days
-          months += (days / month_days)
+          @months += (days / month_days)
         else
-          months += 1
+          @months += 1
         end
         days -= month_days
       end
     else
       normal_year_months.reverse.each do |month_days|
+        break if days <= 0
+
         if days < month_days
-          months += (days / month_days)
+          @months += (days / month_days)
         else
-          months += 1
+          @months += 1
         end
         days -= month_days
       end
@@ -79,18 +92,25 @@ class TimeDifference
   def last_year_months(days)
     if @end_time.to_date.leap?
       leap_year_months.each do |month_days|
+        break if days <= 0
+
         if days < month_days
-          months += (days / month_days)
+          @months += (days / month_days)
         else
-          months += 1
+          @months += 1
         end
+        days -= month_days
+      end
     else
       normal_year_months.each do |month_days|
+        break if days <= 0
+
         if days < month_days
-          months += (days / month_days)
+          @months += (days / month_days)
         else
-          months += 1
+          @months += 1
         end
+        days -= month_days
       end
     end
   end
