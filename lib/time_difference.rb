@@ -124,9 +124,16 @@ class TimeDifference
   end
 
   def set_partial_months
-    first_month_days = @months_array[@start_time.month - 1] - @start_time.day
-    @months += (first_month_days.to_f / @months_array[@start_time.month - 1].to_f)
-    @months += (@end_time.day.to_f / @months_array[@end_time.month - 1].to_f)
+    if @end_time.day > @start_time.day
+      @months += 1
+      remaining_days = @end_time.day - @start_time.day
+      @months += (remaining_days.to_f / @months_array[@end_time.month - 1].to_f)
+    else
+      first_month_days = @months_array[@start_time.month - 1] - @start_time.day
+      @months += (first_month_days.to_f / @months_array[@start_time.month - 1].to_f)
+      @months += (@end_time.day.to_f / @months_array[@end_time.month - 1].to_f)
+    end
+
   end
 
   def set_same_month_months
