@@ -98,6 +98,7 @@ describe TimeDifference do
 
           expect(TimeDifference.between(start_time, end_time).in_months).to eql(1.02)
         end
+
       end
     end
   end
@@ -134,6 +135,22 @@ describe TimeDifference do
         end_time = clazz.new(2011, 1)
 
         expect(TimeDifference.between(start_time, end_time).in_days).to eql(334.0)
+      end
+
+      context "it's a leap year" do
+        it 'calculates the correct number of days when not including 29th February' do
+          start_time = clazz.new(2020, 2, 26)
+          end_time = clazz.new(2020, 2, 28)
+
+          expect(TimeDifference.between(start_time, end_time).in_days).to eql(2.0)
+        end
+
+        it 'calculates the correct number of days including 29th February' do
+          start_time = clazz.new(2020, 2, 28)
+          end_time = clazz.new(2020, 3, 1)
+
+          expect(TimeDifference.between(start_time, end_time).in_days).to eql(2.0)
+        end
       end
     end
   end
