@@ -334,7 +334,7 @@ describe TimeDifference do
 
             it 'returns 0.5' do
               start_time = clazz.new(2019, 4, 1)
-              end_time = clazz.new(2019, 4, 15)
+              end_time = clazz.new(2019, 4, 16)
 
               expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.5)
             end
@@ -343,21 +343,21 @@ describe TimeDifference do
               start_time = clazz.new(2019, 4, 1)
               end_time = clazz.new(2019, 4, 30)
 
-              expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.97)
+              expect(TimeDifference.between(start_time, end_time).in_months).to eql(0.97)
             end
 
             it 'returns 0.33' do
               start_time = clazz.new(2019, 4, 1)
               end_time = clazz.new(2019, 4, 11)
 
-              expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.33)
+              expect(TimeDifference.between(start_time, end_time).in_months).to eql(0.33)
             end
 
             it '1st to 28th February returns 0.96' do
               start_time = clazz.new(2019, 2, 1)
               end_time = clazz.new(2019, 2, 28)
 
-              expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.96)
+              expect(TimeDifference.between(start_time, end_time).in_months).to eql(0.96)
             end
           end
 
@@ -366,14 +366,14 @@ describe TimeDifference do
               start_time = clazz.new(2020, 2, 1)
               end_time = clazz.new(2020, 2, 28)
 
-              expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.93)
+              expect(TimeDifference.between(start_time, end_time).in_months).to eql(0.93)
             end
 
             it '1st to 29th February returns 0.97' do
               start_time = clazz.new(2020, 2, 1)
               end_time = clazz.new(2020, 2, 29)
 
-              expect(TimeDifference.between(start_time, end_time).in_months.round(2)).to eql(0.97)
+              expect(TimeDifference.between(start_time, end_time).in_months).to eql(0.97)
             end
           end
         end
